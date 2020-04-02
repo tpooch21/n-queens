@@ -34,7 +34,7 @@ describe('Board', function() {
       var testBoard = new Board({n: 4});
       testBoard.togglePiece(0, 3);
       testBoard.togglePiece(1, 2);
-      expect(testBoard.hasMajorDiagonalConflictAt(3, 0)).to.be.true;
+      expect(testBoard.hasMinorDiagonalConflictAt(3, 0)).to.be.true;
     });
 
   });
