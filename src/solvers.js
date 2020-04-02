@@ -316,8 +316,53 @@ window.findNQueensSolution = function(n) {
 };
 
 // return the number of nxn chessboards that exist, with n queens placed such that none of them can attack each other
+
+
+/* var solutionCount
+   new Board
+   var rows = board.rows()
+
+   placeQueen function (x --> num of queens to place, r --> row)
+    Base case: x === 0
+      solutionCount++;
+      return;
+
+    Iterate over columns in row
+      togglePiece(r, col)
+      Check for conflict on board
+        If not, call placeQueen(x - 1, r + 1)
+      If conflict, togglePiece(r, col)
+    If break out of loop, return
+*/
+
 window.countNQueensSolutions = function(n) {
-  var solutionCount = undefined; //fixme
+  var solutionCount = 0; //fixme
+
+  var board = new Board({n: n});
+  var rows = board.rows();
+  var row = 0;
+
+  var checkQueens = function(x, r) {
+    // Define base case, when no queens left to place
+    if (x === 0) {
+      // Placed all queens, meaning no conflicts have risen
+      solutionCount++;
+      return;
+    }
+
+    // Iterate over columns in row r
+    for (var i = 0; i < rows.length; i++) {
+      board.togglePiece(r, i);
+      if (!(board.hasAnyQueensConflicts())) {
+        checkQueens(x - 1, r + 1);
+      }
+      board.togglePiece(r, i);
+    }
+
+    return;
+  };
+
+  checkQueens(n, row);
 
   console.log('Number of solutions for ' + n + ' queens:', solutionCount);
   return solutionCount;
