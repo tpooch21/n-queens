@@ -28,6 +28,17 @@ describe('Board', function() {
     ]);
   });
 
+  describe('Board with minor diagonal conflict', function() {
+
+    it('should return true for hasMinorDiagonalConflict', function() {
+      var testBoard = new Board({n: 4});
+      testBoard.togglePiece(0, 3);
+      testBoard.togglePiece(1, 2);
+      expect(testBoard.hasMajorDiagonalConflictAt(3, 0)).to.be.true;
+    });
+
+  });
+
   describe('Board with row conflicts', function() {
     verifyConflictTypes(['row', 'rooks', 'queens'], [
       [0, 0, 0, 0],
