@@ -215,12 +215,43 @@ putRookInRow(board, 2){
     putRookInRow(newboard, 1)
 }
 */
+
+/*
+  var occupiedColumns = {};
+  Before we togglePiece, check occupiedColumns for occupied column
+  if !(_.contains(occupiedColumns, col)), then
+    togglePiece(r, col)
+
+
+  if(occupiedColumns[col] !== undefined){
+    continue;
+  }
+  toggle the piece
+  add occupiedColumns[col] = true;
+  call putRookInRow(x-1, r+1)
+  delete occupiedColumns[col]
+  toggle the piece
+
+*/
+
+
+/*  columns: {}
+
+    [0, 0, 0]
+    [0, 0, 0]
+    [0, 0, 0]
+
+    6
+*/
+
+
 window.countNRooksSolutions = function(n) {
 
   var board = new Board({n: n});
   var rows = board.rows();
   var row = 0;
   var solutionCount = 0; //fixme
+  var occupiedColumns = {};
 
   var putRookInRow = function(x, r) {
     if (x === 0) {
@@ -229,11 +260,30 @@ window.countNRooksSolutions = function(n) {
     }
 
     for (var col = 0; col < rows.length; col++) {
-      board.togglePiece(r, col);
-      if (!(board.hasAnyRooksConflicts())) {
-        putRookInRow(x - 1, r + 1);
+      if(occupiedColumns[col]){
+        continue;
       }
+
       board.togglePiece(r, col);
+      occupiedColumns[col] = 1;
+
+      putRookInRow(x-1, r+1);
+
+      board.togglePiece(r, col);
+      delete occupiedColumns[col];
+      // if col in occupiedColumns,
+      //    continue
+      // if col not in occupiedColumns
+      //    togglePiece
+      //    add column to occupiedColumns
+      //    call putRookInRow(x - 1, r + 1)
+      // board.togglePiece(r, col);
+      // Delet col key from occupiedColumns
+
+      // board.togglePiece(r, col);
+      // if (!(board.hasAnyRooksConflicts())) {
+      //   putRookInRow(x - 1, r + 1);
+      // }
     }
 
     return;
