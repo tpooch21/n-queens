@@ -250,7 +250,7 @@ window.countNRooksSolutions = function(n) {
   var board = new Board({n: n});
   var rows = board.rows();
   var row = 0;
-  var solutionCount = 0; //fixme
+  var solutionCount = 0;
   var occupiedColumns = {};
 
   var putRookInRow = function(x, r) {
@@ -271,19 +271,7 @@ window.countNRooksSolutions = function(n) {
 
       board.togglePiece(r, col);
       delete occupiedColumns[col];
-      // if col in occupiedColumns,
-      //    continue
-      // if col not in occupiedColumns
-      //    togglePiece
-      //    add column to occupiedColumns
-      //    call putRookInRow(x - 1, r + 1)
-      // board.togglePiece(r, col);
-      // Delet col key from occupiedColumns
 
-      // board.togglePiece(r, col);
-      // if (!(board.hasAnyRooksConflicts())) {
-      //   putRookInRow(x - 1, r + 1);
-      // }
     }
 
     return;
@@ -385,12 +373,27 @@ window.findNQueensSolution = function(n) {
     If break out of loop, return
 */
 
+/*
+  Object to store occupiedColumns
+  If col is in occupiedColumns, continue
+  If not:
+    Toggle piece
+    Add to occupiedColumns
+    Check board for majorDiagConf or minorDiagConf
+    If none, then call checkQueens(x - 1, r + 1)
+  Toggle piece (off)
+  Take out of occupied columns
+
+*/
+
+
 window.countNQueensSolutions = function(n) {
   var solutionCount = 0; //fixme
 
   var board = new Board({n: n});
   var rows = board.rows();
   var row = 0;
+  var occupiedColumns = {};
 
   var checkQueens = function(x, r) {
     // Define base case, when no queens left to place
@@ -401,12 +404,25 @@ window.countNQueensSolutions = function(n) {
     }
 
     // Iterate over columns in row r
-    for (var i = 0; i < rows.length; i++) {
-      board.togglePiece(r, i);
-      if (!(board.hasAnyQueensConflicts())) {
+    for (var col = 0; col < rows.length; col++) {
+      if (occupiedColumns[col]) {
+        continue;
+      }
+
+      board.togglePiece(r, col);
+      occupiedColumns[col] = 1;
+
+      // Check for diagonal conflicts
+      if (!(board.hasAnyMajorDiagonalConflicts() || board.hasAnyMinorDiagonalConflicts())) {
         checkQueens(x - 1, r + 1);
       }
-      board.togglePiece(r, i);
+
+      board.togglePiece(r, col);
+      delete occupiedColumns[col];
+      // if (!(board.hasAnyQueensConflicts())) {
+      //   checkQueens(x - 1, r + 1);
+      // }
+      // board.togglePiece(r, i);
     }
 
     return;
