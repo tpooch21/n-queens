@@ -260,14 +260,14 @@ window.countNRooksSolutions = function(n) {
     }
 
     for (var col = 0; col < rows.length; col++) {
-      if(occupiedColumns[col]){
+      if (occupiedColumns[col]) {
         continue;
       }
 
       board.togglePiece(r, col);
       occupiedColumns[col] = 1;
 
-      putRookInRow(x-1, r+1);
+      putRookInRow(x - 1, r + 1);
 
       board.togglePiece(r, col);
       delete occupiedColumns[col];
